@@ -1,5 +1,5 @@
 #!/usr/local/bin/Rscript
-default_file_name <- '/data/output_dpt.json'
+default_file_name <- '/data/output_slicer.json'
 input <- commandArgs(trailingOnly=TRUE)[1]
 output <- commandArgs(trailingOnly=TRUE)[2]
 
@@ -35,8 +35,6 @@ slicer_analysis <- function(exp_matrix){
   return(list(cell_names=cell_names, cell_ordering=cell_ordering, branch_assignment=branch_assignment))
 }
 
-data<-replicate(110, rnbinom(500, c(3, 10, 45, 100), .1))
-
 data<-read_data(input)
 slicer_list <- slicer_analysis(data)
 
@@ -46,4 +44,4 @@ cell_names <- slicer_list[["cell_names"]]
 
 source("/home/traj-converters/src/R/slicer_convert.r")
 
-write_common_json(branch_assignment, cell_ordering, cell_names, file="/home/shared/trash.json")
+write_common_json(branch_assignment, cell_ordering, cell_names, file=output)
