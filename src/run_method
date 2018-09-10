@@ -15,7 +15,7 @@ library("lle")
 
 read_data <- function(file){
   # Read tab matrix from data dir.
-  data <- as.matrix(read.table(paste(c("/data/",file),collapse=""), sep="\t", header=T))
+  data <- as.matrix(read.table(paste(c("/data/",file),collapse=""), sep="\t", header=T, row.names=1))
   
 }
 slicer_analysis <- function(exp_matrix){
