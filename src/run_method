@@ -1,13 +1,19 @@
 #!/usr/local/bin/Rscript
-default_file_name <- '/data/output_slicer.json'
+default_file_name <- '/data/output_monocle.json'
+default_format <- 'json'
+
 input <- commandArgs(trailingOnly=TRUE)[1]
 output <- commandArgs(trailingOnly=TRUE)[2]
+format <- commandArgs(trailingOnly=TRUE)[3]
 
-# Arg checking, and adding /data/ to output.
+# Arg checking, & setting defaults
 if(is.na(output)){
   output <- default_file_name
 } else {
   output <- paste(c("/data/", output),collapse="")
+}
+if(is.na(format)){
+  format <- default_format
 }
 
 library(SLICER)
@@ -34,8 +40,9 @@ slicer_analysis <- function(exp_matrix){
   branch_assignment = assign_branches(traj_graph,start)
   return(list(cell_names=cell_names, cell_ordering=cell_ordering, branch_assignment=branch_assignment))
 }
-
+message("reading data")
 data<-read_data(input)
+message("executing slicer")
 slicer_list <- slicer_analysis(data)
 
 branch_assignment <- slicer_list[["branch_assignment"]]
@@ -44,4 +51,11 @@ cell_names <- slicer_list[["cell_names"]]
 
 source("/home/traj-converters/src/R/slicer_convert.r")
 
-write_common_json(branch_assignment, cell_ordering, cell_names, file=output)
+if(format == 'json'){
+  message("Converting to common format")
+  write_common_json(branch_assignment, cell_ordering, cell_names, file=output)
+} else if (format == 'cxb'){
+  message("Converterting to cell x branch")
+  write_cell_x_branch(branch_assignment, cell_ordering, cell_names, file=output)
+}
+message("completed")
