@@ -1,5 +1,5 @@
 #!/usr/local/bin/Rscript
-default_file_name <- '/data/output_monocle.json'
+default_file_name <- '/data/output_slicer.json'
 default_format <- 'json'
 
 input <- commandArgs(trailingOnly=TRUE)[1]
